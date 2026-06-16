@@ -64,6 +64,20 @@ nav.scrolled { background:rgba(4,13,33,0.99); box-shadow:0 4px 40px rgba(0,0,0,0
 .nav-links a:hover::after { width:100%; }
 .nav-cta { flex-shrink:0; }
 
+/* Language switcher */
+.lang-switcher {
+  display:flex; align-items:center; gap:4px;
+  background:rgba(0,200,255,0.08); border:1px solid var(--border);
+  border-radius:50px; padding:4px 6px; flex-shrink:0;
+}
+.lang-btn {
+  background:none; border:none; color:var(--muted); font-size:12px; font-weight:600;
+  cursor:pointer; padding:3px 8px; border-radius:50px; transition:var(--transition);
+  font-family:'Poppins',sans-serif;
+}
+.lang-btn.active { background:linear-gradient(135deg, var(--blue), var(--neon)); color:#fff; }
+.lang-btn:hover:not(.active) { color:var(--white); }
+
 .btn-primary {
   background:linear-gradient(135deg, var(--blue), var(--neon));
   color:#fff; border:none; padding:11px 22px; border-radius:50px;
@@ -152,16 +166,73 @@ nav.scrolled { background:rgba(4,13,33,0.99); box-shadow:0 4px 40px rgba(0,0,0,0
 .hero-card h4 { font-size:13px; font-weight:700; margin-bottom:3px; }
 .hero-card p { font-size:11px; color:var(--muted); }
 
-/* ══ WA FLOAT ══ */
-.wa-float {
+.float-group {
   position:fixed; bottom:22px; right:18px; z-index:1000;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.wa-float {
   width:54px; height:54px; background:#25D366; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-size:26px; color:#fff; box-shadow:0 6px 24px rgba(37,211,102,0.5);
-  transition:var(--transition); text-decoration:none; animation:wa-pulse 2.5s ease-in-out infinite;
+  font-size:26px; color:#fff;
+  transition:var(--transition); text-decoration:none; position:relative;
+  box-shadow:0 0 0 0 rgba(37,211,102,0.7);
+  animation:wa-pulse 2.2s ease-in-out infinite;
 }
-.wa-float:hover { transform:scale(1.1); }
-@keyframes wa-pulse { 0%,100%{box-shadow:0 6px 24px rgba(37,211,102,0.4);} 50%{box-shadow:0 6px 40px rgba(37,211,102,0.75);} }
+.wa-float:hover { transform:scale(1.13); }
+@keyframes wa-pulse {
+  0%   { box-shadow:0 0 0 0 rgba(37,211,102,0.7), 0 6px 24px rgba(37,211,102,0.45); }
+  50%  { box-shadow:0 0 0 14px rgba(37,211,102,0), 0 6px 40px rgba(37,211,102,0.75); }
+  100% { box-shadow:0 0 0 0 rgba(37,211,102,0), 0 6px 24px rgba(37,211,102,0.45); }
+}
+.mute-btn{
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+
+    width: 50px;
+    height: 50px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(4,13,33,0.9);
+    color: #fff;
+
+    font-size: 18px;
+    cursor: pointer;
+
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 5px 20px rgba(0,0,0,.25);
+
+    z-index: 9999;
+
+    transition: all .3s ease;
+}
+
+.mute-btn:hover{
+    transform: scale(1.1);
+}
+
+.mute-btn.muted{
+    background: rgba(255,80,80,.9);
+}
+.wa-float::after {
+  content:''; position:absolute; inset:-4px; border-radius:50%;
+  border:2px solid rgba(37,211,102,0.5);
+  animation:wa-ring 2.2s ease-in-out infinite 0.4s;
+}
+@keyframes wa-ring {
+  0%   { transform:scale(1); opacity:1; }
+  100% { transform:scale(1.55); opacity:0; }
+}
+.wa-tooltip {
+  position:absolute; right:64px; background:rgba(4,13,33,0.95);
+  border:1px solid rgba(37,211,102,0.3); border-radius:8px;
+  padding:5px 12px; font-size:11px; font-weight:600; color:#25D366;
+  white-space:nowrap; pointer-events:none; opacity:0; transition:opacity 0.2s;
+}
+.wa-float:hover .wa-tooltip { opacity:1; }
 
 /* ══ SECTIONS ══ */
 section { padding:80px 5%; }
@@ -185,7 +256,12 @@ section { padding:80px 5%; }
 
 /* ══ SERVICES ══ */
 .services { background:linear-gradient(135deg, #020a1a, #040d21); position:relative; overflow:hidden; }
-.services-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:48px; flex-wrap:wrap; gap:20px; }
+.services-header {
+  display:flex; align-items:flex-end; justify-content:center;
+  margin-bottom:48px; flex-wrap:wrap; gap:20px;
+  text-align:center;
+}
+.services-header > div { text-align:center; }
 .services-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
 
 .service-card {
@@ -203,7 +279,6 @@ section { padding:80px 5%; }
 .service-card:hover, .service-card.active { border-color:rgba(0,200,255,0.5); transform:translateY(-8px); box-shadow:0 20px 60px rgba(0,200,255,0.2); }
 .service-card.active { background:linear-gradient(135deg, rgba(26,110,245,0.25), rgba(0,200,255,0.12)); }
 
-/* Imagem de capa do serviço — modo retrato */
 .service-cover-wrap {
   width:100%; aspect-ratio:3/4; max-height:240px;
   overflow:hidden; position:relative; z-index:1;
@@ -228,7 +303,7 @@ section { padding:80px 5%; }
 }
 .btn-ver-mais:hover { transform:translateY(-2px); box-shadow:0 0 20px rgba(0,200,255,0.4); }
 
-/* ══ MODAL DOS SERVIÇOS — 4 imagens retrato ══ */
+/* ══ MODAL DOS SERVIÇOS ══ */
 .modal-overlay {
   position:fixed; inset:0; z-index:2000;
   background:rgba(2,8,24,0.92); backdrop-filter:blur(10px);
@@ -249,7 +324,6 @@ section { padding:80px 5%; }
 .modal-title { font-size:clamp(18px,3vw,26px); font-weight:800; margin-bottom:8px; }
 .modal-desc { color:var(--muted); font-size:14px; line-height:1.8; margin-bottom:22px; }
 
-/* 4 imagens retrato no modal */
 .modal-gallery-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
 .modal-img-portrait {
   border-radius:12px; overflow:hidden; border:1px solid var(--border);
@@ -268,11 +342,20 @@ section { padding:80px 5%; }
 }
 .modal-cta a:hover { transform:translateY(-3px); box-shadow:0 0 50px rgba(37,211,102,0.6); }
 
-/* ══ TRABALHOS REALIZADOS ══ */
+/* ══ TOOLS — title centered ══ */
+.tools { padding:80px 5%; }
+.tools-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.tools .section-title { text-align:center; }
+.tools .section-desc { text-align:center; margin:0 auto; }
+
+/* ══ TRABALHOS REALIZADOS — 1 coluna, retrato ══ */
 .trabalhos { background:linear-gradient(135deg, #020a1a, #040d21); padding:80px 5%; }
-.trabalhos-grid { 
-  display:grid; grid-template-columns:repeat(4,1fr); 
-  gap:10px; margin-top:20px; }
+.trabalhos-grid {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:24px; margin-top:20px;
+  max-width:520px; margin-left:auto; margin-right:auto;
+}
 .trabalho-card {
   background:var(--card-bg); border:1px solid var(--border);
   border-radius:var(--radius); overflow:hidden; transition:var(--transition);
@@ -285,23 +368,16 @@ section { padding:80px 5%; }
 .trabalho-body { padding:18px 18px 20px; }
 .trabalho-body h4 {
   font-size:20px; font-weight:700; margin-bottom:7px;
- 
   background:linear-gradient(90deg, var(--blue-light), var(--neon));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 }
-.trabalho-body p {
-  font-size: 11px;
-color: var(--muted);
-line-height: auto;
-text-align: justify;
-hyphens: auto;
+.trabalho-body p { font-size:11px; color:var(--muted); line-height:1.7; text-align:justify; hyphens:auto; }
 
-   }
-   
-
-/* ══ FAQ ══ */
+/* ══ FAQ — title centered ══ */
 .faq { background:var(--navy); }
 .faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start; }
+.faq-grid > .reveal:first-child .section-title { text-align:center; }
+.faq-grid > .reveal:first-child .section-tag { display:block; text-align:center; }
 .faq-list { display:flex; flex-direction:column; gap:12px; }
 .faq-item { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:var(--transition); }
 .faq-item.open { border-color:rgba(0,200,255,0.4); }
@@ -324,20 +400,29 @@ hyphens: auto;
 
 /* ══ PROJECTS ══ */
 .projects { background:var(--navy2); }
-.project-tabs { display:flex; gap:8px; margin-top:32px; margin-bottom:36px; flex-wrap:wrap; }
+.project-tabs { display:flex; gap:8px; margin-top:32px; margin-bottom:36px; flex-wrap:wrap; justify-content:center; }
 .tab-btn {
   padding:9px 20px; border-radius:50px; border:1.5px solid var(--border);
   background:transparent; color:var(--muted); font-size:13px; font-weight:600;
   cursor:pointer; transition:var(--transition); font-family:'Poppins',sans-serif;
 }
 .tab-btn.active, .tab-btn:hover { background:linear-gradient(135deg, var(--blue), var(--neon)); color:#fff; border-color:transparent; box-shadow:0 0 20px rgba(0,200,255,0.3); }
-.project-showcase { display:grid; grid-template-columns:1fr 1fr; gap:40px; background:var(--card-bg); border:1px solid var(--border); border-radius:22px; padding:36px; align-items:center; }
 
-/* Imagem retrato na tabela de serviços */
+/* Project showcase — portrait image centered & larger */
+.project-showcase {
+  display:grid; grid-template-columns:1fr 1fr; gap:40px;
+  background:var(--card-bg); border:1px solid var(--border);
+  border-radius:22px; padding:36px; align-items:center;
+}
+
 .project-img-portrait {
   border-radius:14px; border:1px solid var(--border);
-  aspect-ratio:3/4; max-height:380px; overflow:hidden;
+  aspect-ratio:3/4;
+  width:100%; max-width:320px;
+  margin:0 auto;
+  overflow:hidden;
   background:linear-gradient(135deg, rgba(26,110,245,0.18), rgba(0,200,255,0.07));
+  display:block;
 }
 .project-img-portrait img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease; }
 .project-img-portrait:hover img { transform:scale(1.04); }
@@ -432,7 +517,6 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   .footer-grid { grid-template-columns:1fr 1fr; gap:30px; }
   .hero-img-wrap { width:clamp(240px,35vw,420px); }
   .modal-gallery-4 { grid-template-columns:repeat(2,1fr); }
-  .trabalhos-grid { grid-template-columns:repeat(2,1fr); }
 }
 @media (max-width:1024px) {
   .pricing-grid { grid-template-columns:1fr; max-width:460px; margin-left:auto; margin-right:auto; }
@@ -440,10 +524,9 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   .about-grid { grid-template-columns:1fr; gap:36px; }
   .about-img { height:320px; }
   .tools-grid { grid-template-columns:1fr; gap:36px; }
-  .tools-img { max-height:320px; margin:0 auto; }
   .faq-grid { grid-template-columns:1fr; gap:36px; }
   .project-showcase { grid-template-columns:1fr; gap:24px; }
-  .project-img-portrait { max-height:300px; }
+  .project-img-portrait { max-width:260px; }
   .hero { gap:24px; }
 }
 @media (max-width:900px) {
@@ -453,7 +536,7 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   .hero-content { max-width:100%; }
   .hero-btns { justify-content:center; }
   .testi-grid { grid-template-columns:1fr 1fr; }
-  .services-header { flex-direction:column; align-items:flex-start; }
+  .services-header { flex-direction:column; align-items:center; }
   .modal-gallery-4 { grid-template-columns:repeat(2,1fr); }
 }
 @media (max-width:768px) {
@@ -479,7 +562,8 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   .project-showcase { padding:22px; }
   .footer-bottom { flex-direction:column; text-align:center; }
   .footer-bottom-links { justify-content:center; }
-  .trabalhos-grid { grid-template-columns:1fr 1fr; }
+  .trabalhos-grid { max-width:380px; }
+  .lang-switcher { display:none; }
 }
 @media (max-width:480px) {
   .logo { font-size:18px; }
@@ -495,9 +579,7 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   .stat-card { padding:22px 14px; }
   .services-grid { grid-template-columns:1fr; }
   .modal-gallery-4 { grid-template-columns:1fr 1fr; }
-  .trabalhos-grid { grid-template-columns:1fr 1fr; }
   .about-img { height:240px; }
-  .tools-img { max-height:240px; }
   .hero-cards { gap:10px; }
   .hero-card { padding:14px 16px; }
   .hero-badge { font-size:10px; padding:6px 14px; }
@@ -510,28 +592,45 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   .btn-primary, .btn-outline { padding:9px 14px; font-size:11.5px; }
   .stats-grid { grid-template-columns:1fr 1fr; gap:10px; }
   .hero-cards-section { padding:0 3% 36px; }
-  .trabalhos-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
 <body>
 
-<a class="wa-float" href="https://wa.me/258834884503?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20da%20L%26J%20Multiservice." target="_blank" title="WhatsApp">
-  <i class="fab fa-whatsapp"></i>
-</a>
+<!-- ══ FLOATING BUTTONS ══ -->
+<div class="float-group">
+  <!-- WhatsApp button -->
+  <a class="wa-float" href="https://wa.me/258834884503?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20da%20L%26J%20Multiservice." target="_blank" title="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-tooltip" data-pt="Fale connosco" data-en="Talk to us">Fale connosco</span>
+  </a>
+</div>
+
+<audio id="bgAudio" loop>
+    <source src="Audio site.mp3" type="audio/mpeg">
+</audio>
+
+<button id="muteBtn" class="mute-btn">
+    <i class="fas fa-volume-up"></i>
+</button>
 
 <!-- ══ NAVBAR ══ -->
 <nav id="navbar">
   <a class="logo" href="#">L&amp;J<span>Multiservice</span></a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#home" onclick="closeMenu()">Início</a></li>
-    <li><a href="#about" onclick="closeMenu()">Sobre</a></li>
-    <li><a href="#services" onclick="closeMenu()">Serviços</a></li>
-    <li><a href="#pricing" onclick="closeMenu()">Preçário</a></li>
-    <li><a href="#faq" onclick="closeMenu()">FAQ</a></li>
+    <li><a href="#home" data-pt="Início" data-en="Home" onclick="closeMenu()">Início</a></li>
+    <li><a href="#about" data-pt="Sobre" data-en="About" onclick="closeMenu()">Sobre</a></li>
+    <li><a href="#services" data-pt="Serviços" data-en="Services" onclick="closeMenu()">Serviços</a></li>
+    <li><a href="#pricing" data-pt="Preçário" data-en="Pricing" onclick="closeMenu()">Preçário</a></li>
+    <li><a href="#faq" data-pt="FAQ" data-en="FAQ" onclick="closeMenu()">FAQ</a></li>
   </ul>
-  <a href="https://wa.me/258834884503?text=Olá!%20Quero%20pedir%20um%20orçamento%20da%20L%26J%20Multiservice." target="_blank" class="btn-primary nav-cta">
-    <i class="fab fa-whatsapp"></i> PEDIR ORÇAMENTO
+  <!-- Language switcher -->
+  <div class="lang-switcher">
+    <button class="lang-btn active" id="btnPT" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+  </div>
+  <a href="https://wa.me/258834884503?text=Olá!%20Quero%20pedir%20um%20orçamento%20da%20L%26J%20Multiservice." target="_blank" class="btn-primary nav-cta" data-pt="PEDIR ORÇAMENTO" data-en="GET A QUOTE">
+    <i class="fab fa-whatsapp"></i> <span data-pt="PEDIR ORÇAMENTO" data-en="GET A QUOTE">PEDIR ORÇAMENTO</span>
   </a>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -545,9 +644,17 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   <div class="hero-deco deco1"></div>
   <div class="hero-deco deco2"></div>
   <div class="hero-content">
-    <div class="hero-badge">Empresa Documentada &amp; Profissional</div>
-    <h1>Empresa de Limpeza e<br><span class="grad">Fumigação em Moçambique</span></h1>
-    <p>A L&amp;J Multiservice oferece serviços profissionais de limpeza e fumigação com equipas treinadas e uniformizadas. Atendemos casas, empresas, indústrias e comércios em toda a Província de Sofala.</p>
+    <div class="hero-badge" data-pt="Empresa Documentada &amp; Profissional" data-en="Registered &amp; Professional Company">Empresa Documentada &amp; Profissional</div>
+    <h1 data-pt="Empresa de Limpeza e<br><span class='grad'>Fumigação em Moçambique</span>" data-en="Cleaning &amp; Fumigation<br><span class='grad'>Company in Mozambique</span>">Empresa de Limpeza e<br><span class="grad">Fumigação em Moçambique</span></h1>
+    <p data-pt="A L&amp;J Multiservice oferece serviços profissionais de limpeza e fumigação com equipas treinadas e uniformizadas. Atendemos casas, empresas, indústrias e comércios em toda a Província de Sofala." data-en="L&amp;J Multiservice offers professional cleaning and fumigation services with trained and uniformed teams. We serve homes, companies, industries and businesses throughout Sofala Province.">A L&amp;J Multiservice oferece serviços profissionais de limpeza e fumigação com equipas treinadas e uniformizadas. Atendemos casas, empresas, indústrias e comércios em toda a Província de Sofala.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/258834884503?text=Olá!%20Quero%20pedir%20um%20orçamento." target="_blank" class="btn-primary">
+        <i class="fab fa-whatsapp"></i> <span data-pt="Pedir Orçamento" data-en="Get a Quote">Pedir Orçamento</span>
+      </a>
+      <a href="#services" class="btn-outline">
+        <span data-pt="Ver Serviços" data-en="View Services">Ver Serviços</span> →
+      </a>
+    </div>
   </div>
   <div class="hero-image">
     <div class="hero-img-wrap">
@@ -561,15 +668,15 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   <div class="hero-cards">
     <div class="hero-card reveal">
       <div class="hero-card-icon"><i class="fas fa-user-shield"></i></div>
-      <div><h4>Equipa Profissional</h4><p>Treinada, uniformizada e identificada</p></div>
+      <div><h4 data-pt="Equipa Profissional" data-en="Professional Team">Equipa Profissional</h4><p data-pt="Treinada, uniformizada e identificada" data-en="Trained, uniformed and identified">Treinada, uniformizada e identificada</p></div>
     </div>
     <div class="hero-card reveal">
       <div class="hero-card-icon"><i class="fas fa-gears"></i></div>
-      <div><h4>Equipamento Moderno</h4><p>Ferramentas profissionais de qualidade</p></div>
+      <div><h4 data-pt="Equipamento Moderno" data-en="Modern Equipment">Equipamento Moderno</h4><p data-pt="Ferramentas profissionais de qualidade" data-en="Professional quality tools">Ferramentas profissionais de qualidade</p></div>
     </div>
     <div class="hero-card reveal">
       <div class="hero-card-icon"><i class="fas fa-shield-halved"></i></div>
-      <div><h4>Empresa Documentada</h4><p>Legalmente constituída em Moçambique</p></div>
+      <div><h4 data-pt="Empresa Documentada" data-en="Registered Company">Empresa Documentada</h4><p data-pt="Legalmente constituída em Moçambique" data-en="Legally established in Mozambique">Legalmente constituída em Moçambique</p></div>
     </div>
   </div>
 </div>
@@ -578,14 +685,14 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
 <section class="about" id="about">
   <div class="about-grid">
     <div class="reveal">
-      <span class="section-tag">Quem Somos</span>
-      <h2 class="section-title">Sobre a <span class="grad">L&amp;J Multiservice</span></h2>
-      <p class="section-desc">Somos uma empresa moçambicana documentada, sediada na Beira, com equipas treinadas e comprometidas com a qualidade em cada serviço prestado. Atendemos todas as províncias de Moçambique.</p>
+      <span class="section-tag" data-pt="Quem Somos" data-en="Who We Are">Quem Somos</span>
+      <h2 class="section-title" data-pt="Sobre a <span class='grad'>L&amp;J Multiservice</span>" data-en="About <span class='grad'>L&amp;J Multiservice</span>">Sobre a <span class="grad">L&amp;J Multiservice</span></h2>
+      <p class="section-desc" data-pt="Somos uma empresa moçambicana documentada, sediada na Beira, com equipas treinadas e comprometidas com a qualidade em cada serviço prestado. Atendemos todas as províncias de Moçambique." data-en="We are a registered Mozambican company based in Beira, with trained teams committed to quality in every service. We serve all provinces of Mozambique.">Somos uma empresa moçambicana documentada, sediada na Beira, com equipas treinadas e comprometidas com a qualidade em cada serviço prestado. Atendemos todas as províncias de Moçambique.</p>
       <div class="about-features">
-        <div class="about-feat"><i class="fas fa-broom"></i><h4>Limpeza Profissional</h4><p>Serviços de limpeza para casas, empresas, indústrias e comércios.</p></div>
-        <div class="about-feat"><i class="fas fa-bug-slash"></i><h4>Fumigação Especializada</h4><p>Eliminação de pragas com produtos certificados e seguros.</p></div>
-        <div class="about-feat"><i class="fas fa-users-cog"></i><h4>Equipa Uniformizada</h4><p>Profissionais treinados, uniformizados e devidamente identificados.</p></div>
-        <div class="about-feat"><i class="fas fa-file-contract"></i><h4>Empresa Documentada</h4><p>Legalmente constituída em Moçambique com garantia de qualidade.</p></div>
+        <div class="about-feat"><i class="fas fa-broom"></i><h4 data-pt="Limpeza Profissional" data-en="Professional Cleaning">Limpeza Profissional</h4><p data-pt="Serviços de limpeza para casas, empresas, indústrias e comércios." data-en="Cleaning services for homes, businesses, industries and commerce.">Serviços de limpeza para casas, empresas, indústrias e comércios.</p></div>
+        <div class="about-feat"><i class="fas fa-bug-slash"></i><h4 data-pt="Fumigação Especializada" data-en="Specialised Fumigation">Fumigação Especializada</h4><p data-pt="Eliminação de pragas com produtos certificados e seguros." data-en="Pest elimination with certified and safe products.">Eliminação de pragas com produtos certificados e seguros.</p></div>
+        <div class="about-feat"><i class="fas fa-users-cog"></i><h4 data-pt="Equipa Uniformizada" data-en="Uniformed Team">Equipa Uniformizada</h4><p data-pt="Profissionais treinados, uniformizados e devidamente identificados." data-en="Trained, uniformed and properly identified professionals.">Profissionais treinados, uniformizados e devidamente identificados.</p></div>
+        <div class="about-feat"><i class="fas fa-file-contract"></i><h4 data-pt="Empresa Documentada" data-en="Registered Company">Empresa Documentada</h4><p data-pt="Legalmente constituída em Moçambique com garantia de qualidade." data-en="Legally established in Mozambique with quality guarantee.">Legalmente constituída em Moçambique com garantia de qualidade.</p></div>
       </div>
     </div>
     <div class="reveal">
@@ -594,65 +701,57 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   </div>
 </section>
 
-
+<!-- ══ SERVICES ══ -->
 <section class="services" id="services">
   <div class="services-header reveal">
     <div>
-      <span class="section-tag">Os Nossos Serviços</span>
-      <h2 class="section-title">Nossos <span class="grad">Serviços</span></h2>
+      <span class="section-tag" data-pt="Os Nossos Serviços" data-en="Our Services">Os Nossos Serviços</span>
+      <h2 class="section-title" data-pt="Nossos <span class='grad'>Serviços</span>" data-en="Our <span class='grad'>Services</span>">Nossos <span class="grad">Serviços</span></h2>
     </div>
   </div>
   <div class="services-grid">
 
-    <!-- Limpeza Geral -->
     <div class="service-card reveal" onclick="openServiceModal('limpeza-geral')">
       <div class="service-cover-wrap">
         <img src="LimpezaGeral_Capa.jpg" alt="Limpeza Geral" class="service-cover"/>
       </div>
       <div class="service-body">
-       
-        <h3>Limpeza Geral</h3>
-        <p>Manutenção completa de escritórios, lojas, condomínios e espaços comerciais. Diária, semanal ou mensal.</p>
-        <button class="btn-ver-mais"><i class="fas fa-images"></i> Ver Mais</button>
+        <h3 data-pt="Limpeza Geral" data-en="General Cleaning">Limpeza Geral</h3>
+        <p data-pt="Manutenção completa de escritórios, lojas, condomínios e espaços comerciais. Diária, semanal ou mensal." data-en="Full maintenance of offices, shops, condominiums and commercial spaces. Daily, weekly or monthly.">Manutenção completa de escritórios, lojas, condomínios e espaços comerciais. Diária, semanal ou mensal.</p>
+        <button class="btn-ver-mais"><i class="fas fa-images"></i> <span data-pt="Ver Mais" data-en="See More">Ver Mais</span></button>
       </div>
     </div>
 
-    <!-- Pós-Obra -->
     <div class="service-card active reveal" onclick="openServiceModal('pos-obra')">
       <div class="service-cover-wrap">
-        <img src="limpeza geral 2.jpg" alt="Limpeza Pós-Obra" class="service-cover"/>
+        <img src="top.jpg" alt="Limpeza Pós-Obra" class="service-cover"/>
       </div>
       <div class="service-body">
-      
-        <h3>Limpeza Pós-Obra</h3>
-        <p>Remoção de resíduos, poeira e manchas após construção ou reforma. Espaço pronto para uso imediato.</p>
-        <button class="btn-ver-mais"><i class="fas fa-images"></i> Ver Mais</button>
+        <h3 data-pt="Limpeza Pós-Obra" data-en="Post-Construction Cleaning">Limpeza Pós-Obra</h3>
+        <p data-pt="Remoção de resíduos, poeira e manchas após construção ou reforma. Espaço pronto para uso imediato." data-en="Removal of debris, dust and stains after construction or renovation. Space ready for immediate use.">Remoção de resíduos, poeira e manchas após construção ou reforma. Espaço pronto para uso imediato.</p>
+        <button class="btn-ver-mais"><i class="fas fa-images"></i> <span data-pt="Ver Mais" data-en="See More">Ver Mais</span></button>
       </div>
     </div>
 
-    <!-- Vidros -->
     <div class="service-card reveal" onclick="openServiceModal('vidros')">
       <div class="service-cover-wrap">
         <img src="vidro.jpg" alt="Lavagem de Vidros" class="service-cover"/>
       </div>
       <div class="service-body">
-
-        <h3>Lavagem de Vidros</h3>
-        <p>Limpeza profissional de janelas, fachadas e divisórias de vidro. Resultado brilhante sem marcas.</p>
-        <button class="btn-ver-mais"><i class="fas fa-images"></i> Ver Mais</button>
+        <h3 data-pt="Lavagem de Vidros" data-en="Window Cleaning">Lavagem de Vidros</h3>
+        <p data-pt="Limpeza profissional de janelas, fachadas e divisórias de vidro. Resultado brilhante sem marcas." data-en="Professional cleaning of windows, glass facades and partitions. Brilliant result without marks.">Limpeza profissional de janelas, fachadas e divisórias de vidro. Resultado brilhante sem marcas.</p>
+        <button class="btn-ver-mais"><i class="fas fa-images"></i> <span data-pt="Ver Mais" data-en="See More">Ver Mais</span></button>
       </div>
     </div>
 
-    <!-- Fumigação -->
     <div class="service-card reveal" onclick="openServiceModal('fumigacao')">
       <div class="service-cover-wrap">
         <img src="Fumigacao 3.jpg" alt="Fumigação e Desinfestação" class="service-cover"/>
       </div>
       <div class="service-body">
-       
-        <h3>Fumigação e Desinfestação</h3>
-        <p>Eliminação de insectos, roedores e pragas em ambientes comerciais e industriais. Produtos certificados.</p>
-        <button class="btn-ver-mais"><i class="fas fa-images"></i> Ver Mais</button>
+        <h3 data-pt="Fumigação e Desinfestação" data-en="Fumigation &amp; Pest Control">Fumigação e Desinfestação</h3>
+        <p data-pt="Eliminação de insectos, roedores e pragas em ambientes comerciais e industriais. Produtos certificados." data-en="Elimination of insects, rodents and pests in commercial and industrial environments. Certified products.">Eliminação de insectos, roedores e pragas em ambientes comerciais e industriais. Produtos certificados.</p>
+        <button class="btn-ver-mais"><i class="fas fa-images"></i> <span data-pt="Ver Mais" data-en="See More">Ver Mais</span></button>
       </div>
     </div>
 
@@ -660,13 +759,6 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
 </section>
 
 <!-- ══ MODAL DOS SERVIÇOS ══ -->
-<!--
-  IMAGENS DO MODAL (4 por serviço, modo retrato):
-  Limpeza Geral : LimpezaGeral_1.jpg  LimpezaGeral_2.jpg  LimpezaGeral_3.jpg  LimpezaGeral_4.jpg
-  Pós-Obra      : PosObra_1.jpg       PosObra_2.jpg       PosObra_3.jpg       PosObra_4.jpg
-  Vidros        : Vidros_1.jpg        Vidros_2.jpg        Vidros_3.jpg        Vidros_4.jpg
-  Fumigação     : Fumigacao_1.jpg     Fumigacao_2.jpg     Fumigacao_3.jpg     Fumigacao_4.jpg
--->
 <div class="modal-overlay" id="serviceModal" onclick="closeServiceModalOutside(event)">
   <div class="modal-box">
     <div class="modal-close"><button onclick="closeServiceModal()"><i class="fas fa-times"></i></button></div>
@@ -678,59 +770,62 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
 <section class="tools">
   <div class="tools-grid">
     <div class="reveal" style="display:flex;justify-content:center;align-items:center;"></div>
-    <div class="reveal">
-      <h2 class="section-title">Serviços Especializados para <span class="grad">Cada Necessidade</span></h2>
-      <p class="section-desc">Além dos serviços principais, oferecemos limpeza industrial, fornecimento de agentes de limpeza e desinfecção de ambientes. Soluções completas para todo Moçambique.</p>
+    <div class="reveal" style="text-align:center;">
+      <h2 class="section-title" data-pt="Serviços Especializados para <span class='grad'>Cada Necessidade</span>" data-en="Specialised Services for <span class='grad'>Every Need</span>">Serviços Especializados para <span class="grad">Cada Necessidade</span></h2>
+      <p class="section-desc" data-pt="Além dos serviços principais, oferecemos limpeza industrial, fornecimento de agentes de limpeza e desinfecção de ambientes. Soluções completas para todo Moçambique." data-en="In addition to our core services, we offer industrial cleaning, supply of cleaning agents and environmental disinfection. Complete solutions for all of Mozambique.">Além dos serviços principais, oferecemos limpeza industrial, fornecimento de agentes de limpeza e desinfecção de ambientes. Soluções completas para todo Moçambique.</p>
       <div style="margin-top:28px;">
-        <img src="Camada 1.jpg" style:margin-top:20px;>
+        <img src="Camada 1.jpg" style="margin-top:20px;border-radius:14px;border:1px solid var(--border);">
       </div>
     </div>
   </div>
 </section>
 
+<!-- ══ TRABALHOS REALIZADOS ══ -->
 <section class="trabalhos">
   <div class="text-center reveal">
-    <span class="section-tag">Galeria de Trabalhos</span>
-    <h2 class="section-title">O Que Já <span class="grad">Realizámos</span></h2>
-    <p class="section-desc" style="margin:0 auto 0;">Veja alguns dos nossos trabalhos reais. Qualidade e profissionalismo em cada detalhe.</p>
+    <span class="section-tag" data-pt="Galeria de Trabalhos" data-en="Work Gallery">Galeria de Trabalhos</span>
+    <h2 class="section-title" data-pt="O Que Já <span class='grad'>Realizámos</span>" data-en="What We Have <span class='grad'>Achieved</span>">O Que Já <span class="grad">Realizámos</span></h2>
+    <p class="section-desc" style="margin:0 auto 0;" data-pt="Veja alguns dos nossos trabalhos reais. Qualidade e profissionalismo em cada detalhe." data-en="See some of our real work. Quality and professionalism in every detail.">Veja alguns dos nossos trabalhos reais. Qualidade e profissionalismo em cada detalhe.</p>
   </div>
   <div class="trabalhos-grid">
 
     <div class="trabalho-card reveal">
       <div class="trabalho-img">
-        <img src="armazem.jpg" alt="Limpeza de Escritório"/>
+        <img src="armazem.jpg" alt="Limpeza de Armazém"/>
       </div>
       <div class="trabalho-body">
-        <h4>Limpeza de Armazem</h4>
-        <p>Tivemos a oportunidade de trabalhar num armazém em Chimoio, após a sua construção, realizando uma limpeza pós-obra e fumigação completa, removendo poeiras, resíduos e prevenindo pragas comuns em espaços recém-edificados.</p>
-      </div>
-    </div>
-     <div class="trabalho-card reveal">
-      <div class="trabalho-img">
-        <img src="mozam auto.jpg" alt="Limpeza de Escritório"/>
-      </div>
-      <div class="trabalho-body">
-        <h4>Mozam Auto</h4>
-        <p>Trabalhámos durante vários anos com a Mozam Auto, na cidade da Beira, realizando a limpeza diária das instalações. Foi um contrato de longa duração que garantiu um espaço sempre organizado, higiénico e pronto para as operações da empresa, sendo uma experiência muito importante no nosso percurso profissional.</p>
-      </div>
-    </div>
-     <div class="trabalho-card reveal">
-      <div class="trabalho-img">
-        <img src="Escritório .jpg" alt="Limpeza de Escritório"/>
-      </div>
-      <div class="trabalho-body">
-        <h4>Limpeza de Escritório</h4>
-        <p>Realizámos uma limpeza pós-obra completa tanto da casa como do escritório, removendo poeira, resíduos de materiais de construção e sujidade acumulada. O objetivo foi deixar todo o espaço limpo, organizado e pronto para uso, garantindo conforto, higiene e um ambiente adequado para habitação e trabalho.</p>
+        <h4 data-pt="Limpeza de Armazém" data-en="Warehouse Cleaning">Limpeza de Armazem</h4>
+        <p data-pt="Tivemos a oportunidade de trabalhar num armazém em Chimoio, após a sua construção, realizando uma limpeza pós-obra e fumigação completa, removendo poeiras, resíduos e prevenindo pragas comuns em espaços recém-edificados." data-en="We had the opportunity to work in a warehouse in Chimoio after its construction, carrying out post-construction cleaning and complete fumigation, removing dust, debris and preventing common pests in newly built spaces.">Tivemos a oportunidade de trabalhar num armazém em Chimoio, após a sua construção, realizando uma limpeza pós-obra e fumigação completa, removendo poeiras, resíduos e prevenindo pragas comuns em espaços recém-edificados.</p>
       </div>
     </div>
 
     <div class="trabalho-card reveal">
       <div class="trabalho-img">
-        <img src="Fumigacao 2.jpg" alt="Fumigação Industrial"/>
+        <img src="mozam auto.jpg" alt="Mozam Auto"/>
       </div>
       <div class="trabalho-body">
-        <h4>Portagem Nhamatanda </h4>
-        <p>Trabalhámos com a Portagem de Nhamatanda, na cidade da Beira, realizando fumigação regular das instalações. O principal desafio era o controlo de várias pragas, com destaque para a presença de abelhas, o que exigia uma intervenção especializada. realizávamos fumigações anuais para prevenção e eliminação, garantindo sempre um ambiente seguro e controlado.</p>
+        <h4 data-pt="Mozam Auto" data-en="Mozam Auto">Mozam Auto</h4>
+        <p data-pt="Trabalhámos durante vários anos com a Mozam Auto, na cidade da Beira, realizando a limpeza diária das instalações. Foi um contrato de longa duração que garantiu um espaço sempre organizado, higiénico e pronto para as operações da empresa." data-en="We worked for several years with Mozam Auto in the city of Beira, carrying out daily cleaning of the facilities. It was a long-term contract that ensured a space always organised, hygienic and ready for the company's operations.">Trabalhámos durante vários anos com a Mozam Auto, na cidade da Beira, realizando a limpeza diária das instalações. Foi um contrato de longa duração que garantiu um espaço sempre organizado, higiénico e pronto para as operações da empresa, sendo uma experiência muito importante no nosso percurso profissional.</p>
+      </div>
+    </div>
+
+    <div class="trabalho-card reveal">
+      <div class="trabalho-img">
+        <img src="Escritório .jpg" alt="Limpeza de Escritório"/>
+      </div>
+      <div class="trabalho-body">
+        <h4 data-pt="Limpeza de Escritório" data-en="Office Cleaning">Limpeza de Escritório</h4>
+        <p data-pt="Realizámos uma limpeza pós-obra completa tanto da casa como do escritório, removendo poeira, resíduos de materiais de construção e sujidade acumulada. O objetivo foi deixar todo o espaço limpo, organizado e pronto para uso." data-en="We carried out a complete post-construction cleaning of both the house and the office, removing dust, construction material debris and accumulated dirt. The goal was to leave the entire space clean, organised and ready for use.">Realizámos uma limpeza pós-obra completa tanto da casa como do escritório, removendo poeira, resíduos de materiais de construção e sujidade acumulada. O objetivo foi deixar todo o espaço limpo, organizado e pronto para uso, garantindo conforto, higiene e um ambiente adequado para habitação e trabalho.</p>
+      </div>
+    </div>
+
+    <div class="trabalho-card reveal">
+      <div class="trabalho-img">
+        <img src="Fumigacao 2.jpg" alt="Portagem Nhamatanda"/>
+      </div>
+      <div class="trabalho-body">
+        <h4 data-pt="Portagem Nhamatanda" data-en="Nhamatanda Toll">Portagem Nhamatanda</h4>
+        <p data-pt="Trabalhámos com a Portagem de Nhamatanda realizando fumigação regular das instalações. O principal desafio era o controlo de várias pragas, com destaque para a presença de abelhas, realizávamos fumigações anuais para prevenção e eliminação." data-en="We worked with the Nhamatanda Toll carrying out regular fumigation of the facilities. The main challenge was controlling various pests, notably bees, and we performed annual fumigations for prevention and elimination, ensuring a safe and controlled environment.">Trabalhámos com a Portagem de Nhamatanda, na cidade da Beira, realizando fumigação regular das instalações. O principal desafio era o controlo de várias pragas, com destaque para a presença de abelhas, o que exigia uma intervenção especializada. realizávamos fumigações anuais para prevenção e eliminação, garantindo sempre um ambiente seguro e controlado.</p>
       </div>
     </div>
 
@@ -739,8 +834,8 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
         <img src="obra 9.jpg" alt="Limpeza Pós-Obra"/>
       </div>
       <div class="trabalho-body">
-        <h4>Limpeza Pós-Obra</h4>
-        <p>Tivemos que realizar serviços de limpeza pós-obra em duas residências na cidade da Beira. A primeira, localizada em Cerâmica, e a segunda em Inhamizua, ambas recém-saídas de construção. Em ambos os casos, efetuámos a remoção completa de poeiras, resíduos de cimento, tintas e demais sujidades resultantes da obra. O objetivo foi entregar as casas totalmente limpas, organizadas e prontas para habitação.</p>
+        <h4 data-pt="Limpeza Pós-Obra" data-en="Post-Construction Cleaning">Limpeza Pós-Obra</h4>
+        <p data-pt="Tivemos que realizar serviços de limpeza pós-obra em duas residências na cidade da Beira. A primeira, localizada em Cerâmica, e a segunda em Inhamizua, ambas recém-saídas de construção. Em ambos os casos, efetuámos a remoção completa de poeiras, resíduos de cimento, tintas e demais sujidades." data-en="We performed post-construction cleaning services in two residences in the city of Beira. The first in Cerâmica and the second in Inhamizua, both newly built. In both cases we carried out complete removal of dust, cement residues, paint and other dirt, delivering the houses fully clean and ready for occupation.">Tivemos que realizar serviços de limpeza pós-obra em duas residências na cidade da Beira. A primeira, localizada em Cerâmica, e a segunda em Inhamizua, ambas recém-saídas de construção. Em ambos os casos, efetuámos a remoção completa de poeiras, resíduos de cimento, tintas e demais sujidades resultantes da obra. O objetivo foi entregar as casas totalmente limpas, organizadas e prontas para habitação.</p>
       </div>
     </div>
 
@@ -749,8 +844,8 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
         <img src="camdada9.jpg" alt="Lavagem de Vidros"/>
       </div>
       <div class="trabalho-body">
-        <h4>Lavagem de Vidros</h4>
-        <p>Tivemos de viajar até Gorongosa para realizar uma limpeza geral numa casa habitada, mas em mau estado. O trabalho durou uma semana e teve como principal destaque a limpeza de vidros e do chão em mosaico, removendo manchas e sujidade acumulada. O resultado foi uma casa totalmente renovada e mais limpa.</p>
+        <h4 data-pt="Lavagem de Vidros" data-en="Window Cleaning">Lavagem de Vidros</h4>
+        <p data-pt="Tivemos de viajar até Gorongosa para realizar uma limpeza geral numa casa habitada, mas em mau estado. O trabalho durou uma semana e teve como principal destaque a limpeza de vidros e do chão em mosaico, removendo manchas e sujidade acumulada." data-en="We travelled to Gorongosa to carry out a general cleaning of an occupied but poorly maintained house. The work lasted a week and the highlights were window cleaning and mosaic floor cleaning, removing stains and accumulated dirt. The result was a fully renewed and much cleaner house.">Tivemos de viajar até Gorongosa para realizar uma limpeza geral numa casa habitada, mas em mau estado. O trabalho durou uma semana e teve como principal destaque a limpeza de vidros e do chão em mosaico, removendo manchas e sujidade acumulada. O resultado foi uma casa totalmente renovada e mais limpa.</p>
       </div>
     </div>
 
@@ -761,28 +856,28 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
 <section class="faq" id="faq">
   <div class="faq-grid">
     <div class="reveal">
-      <span class="section-tag">FAQ</span>
-      <h2 class="section-title">Tem Dúvidas?<br><span class="grad">Perguntas Frequentes</span></h2>
+      <span class="section-tag" data-pt="FAQ" data-en="FAQ">FAQ</span>
+      <h2 class="section-title" data-pt="Tem Dúvidas?<br><span class='grad'>Perguntas Frequentes</span>" data-en="Have Questions?<br><span class='grad'>Frequently Asked Questions</span>">Tem Dúvidas?<br><span class="grad">Perguntas Frequentes</span></h2>
       <div class="faq-list" style="margin-top:28px;">
         <div class="faq-item open">
-          <div class="faq-question" onclick="toggleFaq(this)">Que serviços oferece a L&amp;J Multiservice? <i class="fas fa-plus"></i></div>
-          <div class="faq-answer"><p>Oferecemos limpeza geral, limpeza pós-obra, lavagem de vidros, limpeza industrial, fumigação e desinfestação, fornecimento de agentes de limpeza e desinfecção de ambientes.</p></div>
+          <div class="faq-question" onclick="toggleFaq(this)"><span data-pt="Que serviços oferece a L&amp;J Multiservice?" data-en="What services does L&amp;J Multiservice offer?">Que serviços oferece a L&amp;J Multiservice?</span> <i class="fas fa-plus"></i></div>
+          <div class="faq-answer"><p data-pt="Oferecemos limpeza geral, limpeza pós-obra, lavagem de vidros, limpeza industrial, fumigação e desinfestação, fornecimento de agentes de limpeza e desinfecção de ambientes." data-en="We offer general cleaning, post-construction cleaning, window cleaning, industrial cleaning, fumigation and pest control, supply of cleaning agents and environmental disinfection.">Oferecemos limpeza geral, limpeza pós-obra, lavagem de vidros, limpeza industrial, fumigação e desinfestação, fornecimento de agentes de limpeza e desinfecção de ambientes.</p></div>
         </div>
         <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq(this)">Qual é a área de cobertura da empresa? <i class="fas fa-plus"></i></div>
-          <div class="faq-answer"><p>Estamos sediados na Beira, Rua do Aeroporto, e prestamos serviços para todas as províncias de Moçambique.</p></div>
+          <div class="faq-question" onclick="toggleFaq(this)"><span data-pt="Qual é a área de cobertura da empresa?" data-en="What is the company's coverage area?">Qual é a área de cobertura da empresa?</span> <i class="fas fa-plus"></i></div>
+          <div class="faq-answer"><p data-pt="Estamos sediados na Beira, Rua do Aeroporto, e prestamos serviços para todas as províncias de Moçambique." data-en="We are based in Beira, Rua do Aeroporto, and provide services to all provinces of Mozambique.">Estamos sediados na Beira, Rua do Aeroporto, e prestamos serviços para todas as províncias de Moçambique.</p></div>
         </div>
         <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq(this)">Como posso pedir um orçamento? <i class="fas fa-plus"></i></div>
-          <div class="faq-answer"><p>Pode contactar-nos directamente via WhatsApp no número +258 834 884 503. Elaboramos orçamentos gratuitos e personalizados.</p></div>
+          <div class="faq-question" onclick="toggleFaq(this)"><span data-pt="Como posso pedir um orçamento?" data-en="How can I request a quote?">Como posso pedir um orçamento?</span> <i class="fas fa-plus"></i></div>
+          <div class="faq-answer"><p data-pt="Pode contactar-nos directamente via WhatsApp no número +258 834 884 503. Elaboramos orçamentos gratuitos e personalizados." data-en="You can contact us directly via WhatsApp at +258 834 884 503. We prepare free and personalised quotes.">Pode contactar-nos directamente via WhatsApp no número +258 834 884 503. Elaboramos orçamentos gratuitos e personalizados.</p></div>
         </div>
         <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq(this)">A empresa está legalmente constituída? <i class="fas fa-plus"></i></div>
-          <div class="faq-answer"><p>Sim! A L&amp;J Multiservice é uma empresa documentada e legalmente constituída em Moçambique com equipas treinadas e uniformizadas.</p></div>
+          <div class="faq-question" onclick="toggleFaq(this)"><span data-pt="A empresa está legalmente constituída?" data-en="Is the company legally registered?">A empresa está legalmente constituída?</span> <i class="fas fa-plus"></i></div>
+          <div class="faq-answer"><p data-pt="Sim! A L&amp;J Multiservice é uma empresa documentada e legalmente constituída em Moçambique com equipas treinadas e uniformizadas." data-en="Yes! L&amp;J Multiservice is a registered and legally established company in Mozambique with trained and uniformed teams.">Sim! A L&amp;J Multiservice é uma empresa documentada e legalmente constituída em Moçambique com equipas treinadas e uniformizadas.</p></div>
         </div>
         <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq(this)">Os produtos de fumigação são seguros? <i class="fas fa-plus"></i></div>
-          <div class="faq-answer"><p>Sim! Utilizamos apenas produtos certificados, seguros para a saúde humana e animais de estimação.</p></div>
+          <div class="faq-question" onclick="toggleFaq(this)"><span data-pt="Os produtos de fumigação são seguros?" data-en="Are fumigation products safe?">Os produtos de fumigação são seguros?</span> <i class="fas fa-plus"></i></div>
+          <div class="faq-answer"><p data-pt="Sim! Utilizamos apenas produtos certificados, seguros para a saúde humana e animais de estimação." data-en="Yes! We only use certified products, safe for human health and pets.">Sim! Utilizamos apenas produtos certificados, seguros para a saúde humana e animais de estimação.</p></div>
         </div>
       </div>
     </div>
@@ -793,24 +888,24 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
 <!-- ══ STATS ══ -->
 <section class="stats">
   <div class="stats-grid">
-    <div class="stat-card reveal"><i class="fas fa-briefcase"></i><div class="stat-num" data-target="500">0</div><div class="stat-label">Clientes Satisfeitos</div></div>
-    <div class="stat-card reveal"><i class="fas fa-broom"></i><div class="stat-num" data-target="7">0</div><div class="stat-label">Tipos de Serviço</div></div>
-    <div class="stat-card reveal"><i class="fas fa-star"></i><div class="stat-num" data-target="100">0</div><div class="stat-label">% Profissional</div></div>
-    <div class="stat-card reveal"><i class="fas fa-users"></i><div class="stat-num" data-target="3">0</div><div class="stat-label">Anos de Experiência</div></div>
+    <div class="stat-card reveal"><i class="fas fa-briefcase"></i><div class="stat-num" data-target="500">0</div><div class="stat-label" data-pt="Clientes Satisfeitos" data-en="Satisfied Clients">Clientes Satisfeitos</div></div>
+    <div class="stat-card reveal"><i class="fas fa-broom"></i><div class="stat-num" data-target="7">0</div><div class="stat-label" data-pt="Tipos de Serviço" data-en="Service Types">Tipos de Serviço</div></div>
+    <div class="stat-card reveal"><i class="fas fa-star"></i><div class="stat-num" data-target="100">0</div><div class="stat-label" data-pt="% Profissional" data-en="% Professional">% Profissional</div></div>
+    <div class="stat-card reveal"><i class="fas fa-users"></i><div class="stat-num" data-target="3">0</div><div class="stat-label" data-pt="Anos de Experiência" data-en="Years of Experience">Anos de Experiência</div></div>
   </div>
 </section>
 
-
+<!-- ══ TABELA DE SERVIÇOS ══ -->
 <section class="projects" id="projects">
   <div class="text-center reveal">
-    <span class="section-tag">Tabela de Serviços</span>
-    <h2 class="section-title">Todos os Nossos <span class="grad">Serviços Disponíveis</span></h2>
+    <span class="section-tag" data-pt="Tabela de Serviços" data-en="Services Table">Tabela de Serviços</span>
+    <h2 class="section-title" data-pt="Todos os Nossos <span class='grad'>Serviços Disponíveis</span>" data-en="All Our <span class='grad'>Available Services</span>">Todos os Nossos <span class="grad">Serviços Disponíveis</span></h2>
   </div>
   <div class="project-tabs reveal">
-    <button class="tab-btn active" onclick="switchProjectTab(this,'limpeza')">Limpeza</button>
-    <button class="tab-btn" onclick="switchProjectTab(this,'fumigacao-tab')">Fumigação</button>
-    <button class="tab-btn" onclick="switchProjectTab(this,'industrial-tab')">Industrial</button>
-    <button class="tab-btn" onclick="switchProjectTab(this,'contratos')">Contratos</button>
+    <button class="tab-btn active" onclick="switchProjectTab(this,'limpeza')" data-pt="Limpeza" data-en="Cleaning">Limpeza</button>
+    <button class="tab-btn" onclick="switchProjectTab(this,'fumigacao-tab')" data-pt="Fumigação" data-en="Fumigation">Fumigação</button>
+    <button class="tab-btn" onclick="switchProjectTab(this,'industrial-tab')" data-pt="Industrial" data-en="Industrial">Industrial</button>
+    <button class="tab-btn" onclick="switchProjectTab(this,'contratos')" data-pt="Contratos" data-en="Contracts">Contratos</button>
   </div>
   <div class="project-showcase reveal" id="projectShowcase"></div>
 </section>
@@ -818,133 +913,134 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
 <!-- ══ PRICING ══ -->
 <section class="pricing" id="pricing">
   <div class="text-center reveal">
-    <span class="section-tag">Planos e Preços</span>
-    <h2 class="section-title">Escolha o Seu <span class="grad">Plano</span></h2>
-    <p class="section-desc">Planos flexíveis para cada necessidade.</p>
+    <span class="section-tag" data-pt="Planos e Preços" data-en="Plans &amp; Pricing">Planos e Preços</span>
+    <h2 class="section-title" data-pt="Escolha o Seu <span class='grad'>Plano</span>" data-en="Choose Your <span class='grad'>Plan</span>">Escolha o Seu <span class="grad">Plano</span></h2>
+    <p class="section-desc" data-pt="Planos flexíveis para cada necessidade." data-en="Flexible plans for every need.">Planos flexíveis para cada necessidade.</p>
   </div>
   <div class="pricing-grid">
     <div class="price-card reveal">
-      <div class="price-label">Plano Diário</div>
-      <div class="price-amount">Pontual</div>
-      <div class="price-period">por sessão diária</div>
+      <div class="price-label" data-pt="Plano Diário" data-en="Daily Plan">Plano Diário</div>
+      <div class="price-amount" data-pt="Pontual" data-en="One-off">Pontual</div>
+      <div class="price-period" data-pt="por sessão diária" data-en="per daily session">por sessão diária</div>
       <ul class="price-features">
-        <li><i class="fas fa-check"></i> Limpeza diária do espaço</li>
-        <li><i class="fas fa-check"></i> Varrimento e limpeza básica</li>
-        <li><i class="fas fa-check"></i> Limpeza de superfícies</li>
-        <li><i class="fas fa-check"></i> Remoção de lixo diária</li>
-        <li><i class="fas fa-times" style="color:var(--muted)"></i> Higienização profunda</li>
+        <li><i class="fas fa-check"></i> <span data-pt="Limpeza diária do espaço" data-en="Daily space cleaning">Limpeza diária do espaço</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Varrimento e limpeza básica" data-en="Sweeping and basic cleaning">Varrimento e limpeza básica</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Limpeza de superfícies" data-en="Surface cleaning">Limpeza de superfícies</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Remoção de lixo diária" data-en="Daily rubbish removal">Remoção de lixo diária</span></li>
+        <li><i class="fas fa-times" style="color:var(--muted)"></i> <span data-pt="Higienização profunda" data-en="Deep sanitisation">Higienização profunda</span></li>
       </ul>
-      <a href="https://wa.me/258834884503?text=Olá!%20Tenho%20interesse%20no%20Plano%20Diário%20da%20L%26J%20Multiservice." target="_blank" class="btn-outline" style="display:flex;justify-content:center;"><i class="fab fa-whatsapp"></i> Solicitar</a>
+      <a href="https://wa.me/258834884503?text=Olá!%20Tenho%20interesse%20no%20Plano%20Diário%20da%20L%26J%20Multiservice." target="_blank" class="btn-outline" style="display:flex;justify-content:center;"><i class="fab fa-whatsapp"></i> <span data-pt="Solicitar" data-en="Request">Solicitar</span></a>
     </div>
     <div class="price-card featured reveal">
-      <div class="featured-badge">POPULAR</div>
-      <div class="price-label">Plano Mensal</div>
-      <div class="price-amount">Regular</div>
-      <div class="price-period">serviços por mês</div>
+      <div class="featured-badge" data-pt="POPULAR" data-en="POPULAR">POPULAR</div>
+      <div class="price-label" data-pt="Plano Mensal" data-en="Monthly Plan">Plano Mensal</div>
+      <div class="price-amount" data-pt="Regular" data-en="Regular">Regular</div>
+      <div class="price-period" data-pt="serviços por mês" data-en="services per month">serviços por mês</div>
       <ul class="price-features">
-        <li><i class="fas fa-check"></i> Limpeza completa mensal</li>
-        <li><i class="fas fa-check"></i> Agendamento flexível</li>
-        <li><i class="fas fa-check"></i> Cozinha e casas de banho</li>
-        <li><i class="fas fa-check"></i> Lavagem de vidros incluída</li>
-        <li><i class="fas fa-check"></i> Higienização profunda mensal</li>
+        <li><i class="fas fa-check"></i> <span data-pt="Limpeza completa mensal" data-en="Full monthly cleaning">Limpeza completa mensal</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Agendamento flexível" data-en="Flexible scheduling">Agendamento flexível</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Cozinha e casas de banho" data-en="Kitchen and bathrooms">Cozinha e casas de banho</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Lavagem de vidros incluída" data-en="Window cleaning included">Lavagem de vidros incluída</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Higienização profunda mensal" data-en="Monthly deep sanitisation">Higienização profunda mensal</span></li>
       </ul>
-      <a href="https://wa.me/258834884503?text=Olá!%20Tenho%20interesse%20no%20Plano%20Mensal%20da%20L%26J%20Multiservice." target="_blank" class="btn-primary" style="display:flex;justify-content:center;"><i class="fab fa-whatsapp"></i> Solicitar</a>
+      <a href="https://wa.me/258834884503?text=Olá!%20Tenho%20interesse%20no%20Plano%20Mensal%20da%20L%26J%20Multiservice." target="_blank" class="btn-primary" style="display:flex;justify-content:center;"><i class="fab fa-whatsapp"></i> <span data-pt="Solicitar" data-en="Request">Solicitar</span></a>
     </div>
     <div class="price-card reveal">
-      <div class="price-label">Plano Anual</div>
-      <div class="price-amount">Contrato</div>
-      <div class="price-period">por Anos</div>
+      <div class="price-label" data-pt="Plano Anual" data-en="Annual Plan">Plano Anual</div>
+      <div class="price-amount" data-pt="Contrato" data-en="Contract">Contrato</div>
+      <div class="price-period" data-pt="por Anos" data-en="per Year">por Anos</div>
       <ul class="price-features">
-        <li><i class="fas fa-check"></i> Agentes uniformizados</li>
-        <li><i class="fas fa-check"></i> Produtos e equipamentos próprios</li>
-        <li><i class="fas fa-check"></i> Organização e limpeza do sector</li>
-        <li><i class="fas fa-check"></i> Agendamento prioritário</li>
-        <li><i class="fas fa-check"></i> Preço fixo consoante exigências</li>
-        <li><i class="fas fa-check"></i> Papeladas Assinadas</li>
+        <li><i class="fas fa-check"></i> <span data-pt="Agentes uniformizados" data-en="Uniformed agents">Agentes uniformizados</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Produtos e equipamentos próprios" data-en="Own products and equipment">Produtos e equipamentos próprios</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Organização e limpeza do sector" data-en="Sector organisation and cleaning">Organização e limpeza do sector</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Agendamento prioritário" data-en="Priority scheduling">Agendamento prioritário</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Preço fixo consoante exigências" data-en="Fixed price per requirements">Preço fixo consoante exigências</span></li>
+        <li><i class="fas fa-check"></i> <span data-pt="Papeladas Assinadas" data-en="Signed Paperwork">Papeladas Assinadas</span></li>
       </ul>
-      <a href="https://wa.me/258834884503?text=Olá!%20Tenho%20interesse%20no%20Contrato%20Anual%20da%20L%26J%20Multiservice." target="_blank" class="btn-outline" style="display:flex;justify-content:center;"><i class="fab fa-whatsapp"></i> Solicitar</a>
+      <a href="https://wa.me/258834884503?text=Olá!%20Tenho%20interesse%20no%20Contrato%20Anual%20da%20L%26J%20Multiservice." target="_blank" class="btn-outline" style="display:flex;justify-content:center;"><i class="fab fa-whatsapp"></i> <span data-pt="Solicitar" data-en="Request">Solicitar</span></a>
     </div>
   </div>
 </section>
 
+<!-- ══ TESTIMONIALS ══ -->
 <section class="testimonials" id="testimonials">
   <div class="text-center reveal">
-    <span class="section-tag">Testemunhos</span>
-    <h2 class="section-title">O Que Dizem os Nossos <span class="grad">Clientes</span></h2>
+    <span class="section-tag" data-pt="Testemunhos" data-en="Testimonials">Testemunhos</span>
+    <h2 class="section-title" data-pt="O Que Dizem os Nossos <span class='grad'>Clientes</span>" data-en="What Our <span class='grad'>Clients Say</span>">O Que Dizem os Nossos <span class="grad">Clientes</span></h2>
   </div>
   <div class="testi-grid">
-  <div class="testi-card reveal">
-    <div class="testi-stars">★★★★★</div>
-    <p class="testi-text">"Serviço excelente! A equipa da L&J chegou pontual, bem uniformizada e fez uma limpeza impecável no nosso escritório. Recomendo sem hesitar!"</p>
-    <div class="testi-reactions">
-      <button class="testi-react-btn" onclick="toggleReact(this,'like')"><i class="fas fa-thumbs-up"></i> <span>12</span></button>
-      <button class="testi-react-btn" onclick="toggleReact(this,'love')"><i class="fas fa-heart"></i> <span>8</span></button>
-    </div>
-    <div class="testi-author">
-      <div class="testi-avatar">
-        <img src="Mubobo.jpg" alt="Carlos Machava">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text" data-pt='"Serviço excelente! A equipa da L&J chegou pontual, bem uniformizada e fez uma limpeza impecável no nosso escritório. Recomendo sem hesitar!"' data-en='"Excellent service! The L&J team arrived on time, well uniformed and did an impeccable cleaning of our office. I recommend without hesitation!"'>"Serviço excelente! A equipa da L&J chegou pontual, bem uniformizada e fez uma limpeza impecável no nosso escritório. Recomendo sem hesitar!"</p>
+      <div class="testi-reactions">
+        <button class="testi-react-btn" onclick="toggleReact(this,'like')"><i class="fas fa-thumbs-up"></i> <span>12</span></button>
+        <button class="testi-react-btn" onclick="toggleReact(this,'love')"><i class="fas fa-heart"></i> <span>8</span></button>
       </div>
-      <div>
-        <div class="testi-name">Carlos Eduardo</div>
-        <div class="testi-role">Empresário — Maputo</div>
+      <div class="testi-author">
+        <div class="testi-avatar">
+          <img src="Mubobo.jpg" alt="Carlos Eduardo">
+        </div>
+        <div>
+          <div class="testi-name">Carlos Eduardo</div>
+          <div class="testi-role" data-pt="Empresário — Maputo" data-en="Businessman — Maputo">Empresário — Maputo</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="testi-card reveal">
-    <div class="testi-stars">★★★★★</div>
-    <p class="testi-text">"Contratei a fumigação para o meu armazém e o resultado foi fantástico. Voltarei a contratar com certeza!"</p>
-    <div class="testi-reactions">
-      <button class="testi-react-btn" onclick="toggleReact(this,'like')"><i class="fas fa-thumbs-up"></i> <span>19</span></button>
-      <button class="testi-react-btn" onclick="toggleReact(this,'love')"><i class="fas fa-heart"></i> <span>14</span></button>
-    </div>
-    <div class="testi-author">
-      <div class="testi-avatar">
-        <img src="sofria.jpg" alt="Maria Nhantumbo">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text" data-pt='"Contratei a fumigação para o meu armazém e o resultado foi fantástico. Voltarei a contratar com certeza!"' data-en='"I hired the fumigation for my warehouse and the result was fantastic. I will definitely hire again!"'>"Contratei a fumigação para o meu armazém e o resultado foi fantástico. Voltarei a contratar com certeza!"</p>
+      <div class="testi-reactions">
+        <button class="testi-react-btn" onclick="toggleReact(this,'like')"><i class="fas fa-thumbs-up"></i> <span>19</span></button>
+        <button class="testi-react-btn" onclick="toggleReact(this,'love')"><i class="fas fa-heart"></i> <span>14</span></button>
       </div>
-      <div>
-        <div class="testi-name">Sofia Balanca</div>
-        <div class="testi-role">Comerciante — Beira</div>
+      <div class="testi-author">
+        <div class="testi-avatar">
+          <img src="sofria.jpg" alt="Sofia Balanca">
+        </div>
+        <div>
+          <div class="testi-name">Sofia Balanca</div>
+          <div class="testi-role" data-pt="Comerciante — Beira" data-en="Trader — Beira">Comerciante — Beira</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="testi-card reveal">
-    <div class="testi-stars">★★★★★</div>
-    <p class="testi-text">"Chamámos a L&J para a limpeza pós-obra. Ficou tudo limpo e pronto em menos de um dia. Recomendo!"</p>
-    <div class="testi-reactions">
-      <button class="testi-react-btn" onclick="toggleReact(this,'like')"><i class="fas fa-thumbs-up"></i> <span>7</span></button>
-      <button class="testi-react-btn" onclick="toggleReact(this,'love')"><i class="fas fa-heart"></i> <span>11</span></button>
-    </div>
-    <div class="testi-author">
-      <div class="testi-avatar">
-        <img src="valeri.jpg" alt="João Sitoe">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text" data-pt='"Chamámos a L&J para a limpeza pós-obra. Ficou tudo limpo e pronto em menos de um dia. Recomendo!"' data-en='"We called L&J for post-construction cleaning. Everything was clean and ready in less than a day. I recommend!"'>"Chamámos a L&J para a limpeza pós-obra. Ficou tudo limpo e pronto em menos de um dia. Recomendo!"</p>
+      <div class="testi-reactions">
+        <button class="testi-react-btn" onclick="toggleReact(this,'like')"><i class="fas fa-thumbs-up"></i> <span>7</span></button>
+        <button class="testi-react-btn" onclick="toggleReact(this,'love')"><i class="fas fa-heart"></i> <span>11</span></button>
       </div>
-      <div>
-        <div class="testi-name">João Sitoe</div>
-        <div class="testi-role">Maputo-Matola</div>
+      <div class="testi-author">
+        <div class="testi-avatar">
+          <img src="valeri.jpg" alt="João Sitoe">
+        </div>
+        <div>
+          <div class="testi-name">João Sitoe</div>
+          <div class="testi-role" data-pt="Maputo-Matola" data-en="Maputo-Matola">Maputo-Matola</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
   <div class="testi-more reveal">
-    <div class="testi-more-count"><i class="fas fa-comments"></i> +100 clientes já comentaram</div>
+    <div class="testi-more-count"><i class="fas fa-comments"></i> <span data-pt="+100 clientes já comentaram" data-en="+100 clients have already reviewed">+100 clientes já comentaram</span></div>
   </div>
   <div class="write-testi reveal">
-    <h3>Deixe a Sua Opinião</h3>
-    <p>A sua experiência é importante para nós e para outros clientes.</p>
+    <h3 data-pt="Deixe a Sua Opinião" data-en="Leave Your Review">Deixe a Sua Opinião</h3>
+    <p data-pt="A sua experiência é importante para nós e para outros clientes." data-en="Your experience matters to us and to other clients.">A sua experiência é importante para nós e para outros clientes.</p>
     <div class="write-testi-form">
-      <input type="text" placeholder="O seu nome *" id="tNome"/>
-      <input type="text" placeholder="Profissão / Local (ex: Empresário — Beira)" id="tCargo"/>
+      <input type="text" id="tNome" data-pt-placeholder="O seu nome *" data-en-placeholder="Your name *" placeholder="O seu nome *"/>
+      <input type="text" id="tCargo" data-pt-placeholder="Profissão / Local (ex: Empresário — Beira)" data-en-placeholder="Profession / Location (e.g.: Businessman — Beira)" placeholder="Profissão / Local (ex: Empresário — Beira)"/>
       <div class="full">
-        <div style="margin-bottom:10px;font-size:13px;color:var(--muted);">Classificação:</div>
+        <div style="margin-bottom:10px;font-size:13px;color:var(--muted);" data-pt="Classificação:" data-en="Rating:">Classificação:</div>
         <div class="write-testi-stars" id="tStars" onclick="rateStar(event)">
           <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
         </div>
       </div>
-      <textarea class="full" rows="4" placeholder="Escreva a sua experiência com os nossos serviços..." id="tMsg"></textarea>
+      <textarea class="full" rows="4" id="tMsg" data-pt-placeholder="Escreva a sua experiência com os nossos serviços..." data-en-placeholder="Write about your experience with our services..." placeholder="Escreva a sua experiência com os nossos serviços..."></textarea>
       <div class="full" style="display:flex;justify-content:flex-end;">
-        <button class="btn-primary" onclick="submitTestimony()"><i class="fas fa-paper-plane"></i> Enviar via WhatsApp</button>
+        <button class="btn-primary" onclick="submitTestimony()"><i class="fas fa-paper-plane"></i> <span data-pt="Enviar via WhatsApp" data-en="Send via WhatsApp">Enviar via WhatsApp</span></button>
       </div>
     </div>
   </div>
@@ -955,119 +1051,317 @@ footer { background:var(--navy2); border-top:1px solid var(--border); padding:60
   <div class="footer-grid">
     <div>
       <div class="footer-logo">L&amp;J<span>Multiservice</span></div>
-      <p class="footer-desc">Empresa moçambicana documentada, especializada em limpeza profissional e fumigação. Servindo a Beira e toda Moçambique com qualidade e profissionalismo.</p>
+      <p class="footer-desc" data-pt="Empresa moçambicana documentada, especializada em limpeza profissional e fumigação. Servindo a Beira e toda Moçambique com qualidade e profissionalismo." data-en="Registered Mozambican company, specialised in professional cleaning and fumigation. Serving Beira and all of Mozambique with quality and professionalism.">Empresa moçambicana documentada, especializada em limpeza profissional e fumigação. Servindo a Beira e toda Moçambique com qualidade e profissionalismo.</p>
     </div>
     <div class="footer-col">
-      <h4>Serviços</h4>
+      <h4 data-pt="Serviços" data-en="Services">Serviços</h4>
       <ul class="footer-links">
-        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Limpeza%20Geral." target="_blank">Limpeza Geral</a></li>
-        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Limpeza%20Pós-Obra." target="_blank">Limpeza Pós-Obra</a></li>
-        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Lavagem%20de%20Vidros." target="_blank">Lavagem de Vidros</a></li>
-        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Fumigação." target="_blank">Fumigação e Desinfestação</a></li>
-        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Limpeza%20Industrial." target="_blank">Limpeza Industrial</a></li>
+        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Limpeza%20Geral." target="_blank" data-pt="Limpeza Geral" data-en="General Cleaning">Limpeza Geral</a></li>
+        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Limpeza%20Pós-Obra." target="_blank" data-pt="Limpeza Pós-Obra" data-en="Post-Construction Cleaning">Limpeza Pós-Obra</a></li>
+        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Lavagem%20de%20Vidros." target="_blank" data-pt="Lavagem de Vidros" data-en="Window Cleaning">Lavagem de Vidros</a></li>
+        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Fumigação." target="_blank" data-pt="Fumigação e Desinfestação" data-en="Fumigation &amp; Pest Control">Fumigação e Desinfestação</a></li>
+        <li><a href="https://wa.me/258834884503?text=Olá!%20Quero%20solicitar%20Limpeza%20Industrial." target="_blank" data-pt="Limpeza Industrial" data-en="Industrial Cleaning">Limpeza Industrial</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Contactos</h4>
+      <h4 data-pt="Contactos" data-en="Contacts">Contactos</h4>
       <div class="contact-item"><i class="fab fa-whatsapp"></i><span><a href="https://wa.me/258834884503" target="_blank">+258 834 884 503</a></span></div>
-      <div class="contact-item"><i class="fas fa-clock"></i><span>Seg–Sáb: 07:00 – 18:00</span></div>
-      <div class="contact-item"><i class="fas fa-route"></i><span>Cobertura todo o Moçambique</span></div>
+      <div class="contact-item"><i class="fas fa-clock"></i><span data-pt="Seg–Sáb: 07:00 – 18:00" data-en="Mon–Sat: 07:00 – 18:00">Seg–Sáb: 07:00 – 18:00</span></div>
+      <div class="contact-item"><i class="fas fa-route"></i><span data-pt="Cobertura todo o Moçambique" data-en="Coverage all of Mozambique">Cobertura todo o Moçambique</span></div>
     </div>
     <div class="footer-col">
-      <h4>Membros</h4>
-      <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Subscreva para se tornar membro ou cliente oficial da L&amp;J Multiservice.</p>
+      <h4 data-pt="Membros" data-en="Members">Membros</h4>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:14px;" data-pt="Subscreva para se tornar membro ou cliente oficial da L&amp;J Multiservice." data-en="Subscribe to become an official member or client of L&amp;J Multiservice.">Subscreva para se tornar membro ou cliente oficial da L&amp;J Multiservice.</p>
       <div class="newsletter-form">
         <form onsubmit="handleMailchimp(event)">
-          <input type="email" id="mce-EMAIL" placeholder="O seu email" required/>
-          <button type="submit" class="btn-primary" style="border:none;width:100%;justify-content:center;margin-top:8px;"><i class="fas fa-paper-plane"></i> Subscrever</button>
+          <input type="email" id="mce-EMAIL" data-pt-placeholder="O seu email" data-en-placeholder="Your email" placeholder="O seu email" required/>
+          <button type="submit" class="btn-primary" style="border:none;width:100%;justify-content:center;margin-top:8px;"><i class="fas fa-paper-plane"></i> <span data-pt="Subscrever" data-en="Subscribe">Subscrever</span></button>
         </form>
-        <div class="mc-success" id="mcSuccess"><i class="fas fa-check-circle"></i> Subscrito com sucesso! Obrigado.</div>
+        <div class="mc-success" id="mcSuccess"><i class="fas fa-check-circle"></i> <span data-pt="Subscrito com sucesso! Obrigado." data-en="Successfully subscribed! Thank you.">Subscrito com sucesso! Obrigado.</span></div>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 L&amp;J Multiservice. Todos os direitos reservados.</p>
+    <p data-pt="© 2025 L&amp;J Multiservice. Todos os direitos reservados." data-en="© 2025 L&amp;J Multiservice. All rights reserved.">© 2025 L&amp;J Multiservice. Todos os direitos reservados.</p>
     <div class="footer-bottom-links">
-      <a href="#">Política de Privacidade</a>
-      <a href="#">Termos de Serviço</a>
+      <a href="#" data-pt="Política de Privacidade" data-en="Privacy Policy">Política de Privacidade</a>
+      <a href="#" data-pt="Termos de Serviço" data-en="Terms of Service">Termos de Serviço</a>
     </div>
   </div>
 </footer>
 
 <script>
-window.addEventListener('load', () => setTimeout(tryAutoplay, 600));
+const audio = document.getElementById("bgAudio");
+const muteBtn = document.getElementById("muteBtn");
 
-let fired = false;
-function firstInteraction() {
-  if (!fired && !audioPlaying) { fired = true; tryAutoplay(); }
+let audioStarted = false;
+
+/* Iniciar áudio na primeira interação */
+function startAudio() {
+    if (!audioStarted) {
+        audio.play().then(() => {
+            audioStarted = true;
+            console.log("Áudio iniciado");
+        }).catch(err => {
+            console.log("Erro ao iniciar áudio:", err);
+        });
+    }
 }
-document.addEventListener('click', firstInteraction, { once: true });
-document.addEventListener('touchstart', firstInteraction, { once: true });
-document.addEventListener('scroll', firstInteraction, { once: true });
 
-const SERVICE_DATA = {
-  'limpeza-geral': {
-    tag: 'Limpeza Residencial & Comercial',
-    title: 'Limpeza Geral',
-    desc: 'Manutenção completa de escritórios, lojas, condomínios e espaços comerciais. Serviço diário, semanal ou mensal.',
-    waMsg: 'Olá!%20Quero%20solicitar%20Limpeza%20Geral.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
-    imgs: [
-      { src: 'armazem.jpg', desc: 'Limpeza de Armazem' },
-      { src: 'limpeza geral 3.jpg', desc: 'Limpeza de pisos e superfícies' },
-      { src: 'Obra 2.jpg', desc: 'Limpeza profunda' },
-      { src: 'limpeza geral.jpg', desc: 'Resultado final impecável' }
-    ]
+/* Clique em qualquer lugar */
+document.addEventListener("click", startAudio);
+
+/* Scroll pela primeira vez */
+document.addEventListener("scroll", startAudio);
+
+/* Toque no ecrã */
+document.addEventListener("touchstart", startAudio);
+
+/* Botão de mute */
+if(muteBtn){
+    muteBtn.addEventListener("click", function(e){
+
+        /* Evita que o clique do botão dispare outros eventos */
+        e.stopPropagation();
+
+        if(audio.muted){
+
+            audio.muted = false;
+
+            muteBtn.classList.remove("muted");
+            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+
+        }else{
+
+            audio.muted = true;
+
+            muteBtn.classList.add("muted");
+            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+
+        }
+    });
+}
+/* ══════════════════════════════════════
+   LANGUAGE SYSTEM
+══════════════════════════════════════ */
+let currentLang = 'pt';
+
+const TRANSLATIONS = {
+  // Service modal data — translated version
+  serviceData: {
+    pt: {
+      'limpeza-geral': {
+        tag: 'Limpeza Residencial & Comercial',
+        title: 'Limpeza Geral',
+        desc: 'Manutenção completa de escritórios, lojas, condomínios e espaços comerciais. Serviço diário, semanal ou mensal.',
+        waMsg: 'Olá!%20Quero%20solicitar%20Limpeza%20Geral.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
+        cta: 'Solicitar Limpeza Geral'
+      },
+      'pos-obra': {
+        tag: 'Construção & Renovação',
+        title: 'Limpeza Pós-Obra',
+        desc: 'Remoção completa de resíduos, poeira de cimento e manchas após construção ou reforma.',
+        waMsg: 'Olá!%20Preciso%20de%20Limpeza%20Pós-Obra.%20Qual%20é%20o%20preço%20da%20L%26J%20Multiservice?',
+        cta: 'Solicitar Limpeza Pós-Obra'
+      },
+      'vidros': {
+        tag: 'Fachadas & Janelas',
+        title: 'Lavagem de Vidros',
+        desc: 'Limpeza profissional de janelas, fachadas envidraçadas e divisórias de vidro.',
+        waMsg: 'Olá!%20Quero%20solicitar%20Lavagem%20de%20Vidros.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
+        cta: 'Solicitar Lavagem de Vidros'
+      },
+      'fumigacao': {
+        tag: 'Controlo de Pragas',
+        title: 'Fumigação e Desinfestação',
+        desc: 'Eliminação eficaz de insectos, roedores e todo o tipo de pragas com produtos certificados.',
+        waMsg: 'Olá!%20Preciso%20de%20Fumigação.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
+        cta: 'Solicitar Fumigação'
+      }
+    },
+    en: {
+      'limpeza-geral': {
+        tag: 'Residential & Commercial Cleaning',
+        title: 'General Cleaning',
+        desc: 'Full maintenance of offices, shops, condominiums and commercial spaces. Daily, weekly or monthly service.',
+        waMsg: 'Hello!%20I%20want%20to%20request%20General%20Cleaning.%20Can%20you%20send%20a%20quote%20from%20L%26J%20Multiservice?',
+        cta: 'Request General Cleaning'
+      },
+      'pos-obra': {
+        tag: 'Construction & Renovation',
+        title: 'Post-Construction Cleaning',
+        desc: 'Complete removal of debris, cement dust and stains after construction or renovation.',
+        waMsg: 'Hello!%20I%20need%20Post-Construction%20Cleaning.%20What%20is%20the%20price%20of%20L%26J%20Multiservice?',
+        cta: 'Request Post-Construction Cleaning'
+      },
+      'vidros': {
+        tag: 'Facades & Windows',
+        title: 'Window Cleaning',
+        desc: 'Professional cleaning of windows, glass facades and glass partitions.',
+        waMsg: 'Hello!%20I%20want%20to%20request%20Window%20Cleaning.%20Can%20you%20send%20a%20quote%20from%20L%26J%20Multiservice?',
+        cta: 'Request Window Cleaning'
+      },
+      'fumigacao': {
+        tag: 'Pest Control',
+        title: 'Fumigation & Pest Control',
+        desc: 'Effective elimination of insects, rodents and all types of pests with certified products.',
+        waMsg: 'Hello!%20I%20need%20Fumigation.%20Can%20you%20send%20a%20quote%20from%20L%26J%20Multiservice?',
+        cta: 'Request Fumigation'
+      }
+    }
   },
-  'pos-obra': {
-    tag: 'Construção & Renovação',
-    title: 'Limpeza Pós-Obra',
-    desc: 'Remoção completa de resíduos, poeira de cimento e manchas após construção ou reforma.',
-    waMsg: 'Olá!%20Preciso%20de%20Limpeza%20Pós-Obra.%20Qual%20é%20o%20preço%20da%20L%26J%20Multiservice?',
-    imgs: [
-      { src: 'Obra 6.jpg', desc: 'Remoção de resíduos de construção' },
-      { src: 'Obra 5.jpg', desc: 'Limpeza de poeira de obra' },
-      { src: 'limpeza geral 6.jpg', desc: 'Limpeza de azulejos e cerâmicas' },
-      { src: 'obra 8.jpg', desc: 'Espaço pronto para habitar' }
-    ]
-  },
-  'vidros': {
-    tag: 'Fachadas & Janelas',
-    title: 'Lavagem de Vidros',
-    desc: 'Limpeza profissional de janelas, fachadas envidraçadas e divisórias de vidro.',
-    waMsg: 'Olá!%20Quero%20solicitar%20Lavagem%20de%20Vidros.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
-    imgs: [
-      { src: 'camdada9.jpg', desc: 'Lavagem de janelas residenciais' },
-      { src: 'camada3.jpg', desc: 'Limpeza de fachadas de vidro' },
-      { src: 'camada1.jpg', desc: 'Divisórias de escritório' },
-      { src: 'camada8.jpg', desc: 'Resultado cristalino sem marcas' }
-    ]
-  },
-  'fumigacao': {
-    tag: 'Controlo de Pragas',
-    title: 'Fumigação e Desinfestação',
-    desc: 'Eliminação eficaz de insectos, roedores e todo o tipo de pragas com produtos certificados.',
-    waMsg: 'Olá!%20Preciso%20de%20Fumigação.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
-    imgs: [
-      { src: 'Fumigacao 2.jpg', desc: 'Fumigação de armazéns industriais' },
-      { src: 'Fumigacao 1.jpg', desc: 'Desinfestação de espaços comerciais' },
-      { src: 'Fumigacao 3.jpg', desc: 'Controlo de pragas em restaurantes' },
-      { src: 'Obra 1.jpg', desc: 'Produtos certificados e seguros' }
-    ]
+  projectData: {
+    pt: {
+      limpeza: {
+        img:'limpeza.jpg', tag:'Serviço em Destaque', title:'Limpeza Profissional Completa',
+        desc:'Prestamos serviços completos de limpeza para casas, empresas, indústrias e comércios em toda Moçambique.',
+        items:['Limpeza Geral — Diária / Semanal / Mensal','Limpeza Pós-Obra — Serviço Pontual','Lavagem de Vidros — Pontual / Regular','Desinfecção de Ambientes — Pontual / Regular'],
+        waMsg:'Olá!%20Quero%20solicitar%20Limpeza%20Profissional.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
+        cta:'Solicitar Agora →'
+      },
+      'fumigacao-tab': {
+        img:'Fumigacao 2 - Copia.jpg', tag:'Controlo de Pragas', title:'Fumigação e Desinfestação',
+        desc:'Eliminamos todo o tipo de pragas com produtos certificados e seguros.',
+        items:['Fumigação de Insectos — Baratas, mosquitos, formigas','Desinfestação de Roedores — Ratos e ratazanas','Desinfecção de Ambientes — Vírus e bactérias','Tratamento de Madeiras — Térmitas e fungos'],
+        waMsg:'Olá!%20Preciso%20de%20Fumigação.%20Quero%20orçamento%20da%20L%26J%20Multiservice.',
+        cta:'Solicitar Agora →'
+      },
+      'industrial-tab': {
+        img:'armazem.jpg', tag:'Sector Industrial', title:'Limpeza Industrial Especializada',
+        desc:'Serviços de limpeza pesada para fábricas, armazéns, obras e instalações industriais.',
+        items:['Limpeza de Fábricas e Armazéns','Limpeza de Equipamentos Industriais','Remoção de Resíduos Industriais','Desinfecção de Instalações Industriais'],
+        waMsg:'Olá!%20Tenho%20interesse%20em%20Limpeza%20Industrial.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?',
+        cta:'Solicitar Agora →'
+      },
+      contratos: {
+        img:'contrato.jpg', tag:'Contratos de Longo Prazo', title:'Contratos e Parcerias',
+        desc:'Oferecemos contratos de manutenção para empresas. Planos diários, mensais ou anuais com preço garantido.',
+        items:['Contrato Diário — Serviço diário contínuo','Contrato Mensal — Manutenção mensal completa','Contrato Anual — Preço fixo garantido','Orçamento personalizado para cada empresa'],
+        waMsg:'Olá!%20Quero%20saber%20mais%20sobre%20os%20Contratos%20da%20L%26J%20Multiservice.',
+        cta:'Solicitar Agora →'
+      }
+    },
+    en: {
+      limpeza: {
+        img:'obra 10.jpg', tag:'Featured Service', title:'Complete Professional Cleaning',
+        desc:'We provide comprehensive cleaning services for homes, businesses, industries and commerce throughout Mozambique.',
+        items:['General Cleaning — Daily / Weekly / Monthly','Post-Construction Cleaning — One-off Service','Window Cleaning — One-off / Regular','Environmental Disinfection — One-off / Regular'],
+        waMsg:'Hello!%20I%20want%20Professional%20Cleaning.%20Can%20you%20send%20a%20quote%20from%20L%26J%20Multiservice?',
+        cta:'Request Now →'
+      },
+      'fumigacao-tab': {
+        img:'Fumigacao 3.jpg', tag:'Pest Control', title:'Fumigation & Pest Control',
+        desc:'We eliminate all types of pests with certified and safe products.',
+        items:['Insect Fumigation — Cockroaches, mosquitoes, ants','Rodent Control — Mice and rats','Environmental Disinfection — Viruses and bacteria','Wood Treatment — Termites and fungi'],
+        waMsg:'Hello!%20I%20need%20Fumigation.%20I%20want%20a%20quote%20from%20L%26J%20Multiservice.',
+        cta:'Request Now →'
+      },
+      'industrial-tab': {
+        img:'armazem.jpg', tag:'Industrial Sector', title:'Specialised Industrial Cleaning',
+        desc:'Heavy-duty cleaning services for factories, warehouses, construction sites and industrial facilities.',
+        items:['Factory and Warehouse Cleaning','Industrial Equipment Cleaning','Industrial Waste Removal','Industrial Facility Disinfection'],
+        waMsg:'Hello!%20I%20am%20interested%20in%20Industrial%20Cleaning.%20Can%20you%20send%20a%20quote%20from%20L%26J%20Multiservice?',
+        cta:'Request Now →'
+      },
+      contratos: {
+        img:'contrato.jpg', tag:'Long-Term Contracts', title:'Contracts & Partnerships',
+        desc:'We offer maintenance contracts for businesses. Daily, monthly or annual plans with guaranteed pricing.',
+        items:['Daily Contract — Continuous daily service','Monthly Contract — Full monthly maintenance','Annual Contract — Guaranteed fixed price','Personalised quote for each company'],
+        waMsg:'Hello!%20I%20want%20to%20know%20more%20about%20the%20Contracts%20from%20L%26J%20Multiservice.',
+        cta:'Request Now →'
+      }
+    }
   }
 };
 
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btnPT').classList.toggle('active', lang === 'pt');
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang === 'pt' ? 'pt-MZ' : 'en';
+
+  // Translate all elements with data-pt / data-en attributes
+  document.querySelectorAll('[data-pt],[data-en]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (!val) return;
+    // Handle elements whose content contains HTML (headings with <span>)
+    if (el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4') {
+      el.innerHTML = val;
+    } else if (el.tagName === 'P' && el.classList.contains('testi-text')) {
+      el.textContent = val;
+    } else if (el.tagName === 'DIV' && el.classList.contains('hero-badge')) {
+      el.innerHTML = el.innerHTML.replace(/>[^<]+<\//, '>'+val+'</');
+      // simpler: just set via textContent keeping the ::before pseudo
+      // actually use a data-text approach
+    } else {
+      // For most elements just set innerHTML
+      el.innerHTML = val;
+    }
+  });
+
+  // Translate placeholder attributes
+  document.querySelectorAll('[data-pt-placeholder],[data-en-placeholder]').forEach(el => {
+    const ph = el.getAttribute('data-' + lang + '-placeholder');
+    if (ph) el.placeholder = ph;
+  });
+
+  // Update audio tooltip
+  const tooltip = document.getElementById('audioTooltip');
+  if (tooltip) tooltip.textContent = audioPlaying
+    ? (lang === 'pt' ? 'Pausar música' : 'Pause music')
+    : (lang === 'pt' ? 'Clique para ouvir' : 'Click to listen');
+
+  // Re-render project showcase in new language
+  const activeTab = document.querySelector('.tab-btn.active');
+  if (activeTab) {
+    const key = activeTab.getAttribute('onclick').match(/'([^']+)'/)[1];
+    renderProject(key);
+  }
+}
+
+/* ══════════════════════════════════════
+   SERVICE MODAL
+══════════════════════════════════════ */
+const SERVICE_IMGS = {
+  'limpeza-geral': [
+    { src:'armazem.jpg', descPt:'Limpeza de Armazém', descEn:'Warehouse Cleaning' },
+    { src:'limpeza geral 3.jpg', descPt:'Limpeza de pisos e superfícies', descEn:'Floor and surface cleaning' },
+    { src:'Obra 2.jpg', descPt:'Limpeza profunda', descEn:'Deep cleaning' },
+    { src:'limpeza geral.jpg', descPt:'Resultado final impecável', descEn:'Impeccable final result' }
+  ],
+  'pos-obra': [
+    { src:'Obra 6.jpg', descPt:'Remoção de resíduos de construção', descEn:'Construction waste removal' },
+    { src:'Obra 5.jpg', descPt:'Limpeza de poeira de obra', descEn:'Construction dust cleaning' },
+    { src:'limpeza geral 6.jpg', descPt:'Limpeza de azulejos e cerâmicas', descEn:'Tile and ceramic cleaning' },
+    { src:'obra 8.jpg', descPt:'Espaço pronto para habitar', descEn:'Space ready for occupation' }
+  ],
+  'vidros': [
+    { src:'camdada9.jpg', descPt:'Lavagem de janelas residenciais', descEn:'Residential window washing' },
+    { src:'camada3.jpg', descPt:'Limpeza de fachadas de vidro', descEn:'Glass facade cleaning' },
+    { src:'camada1.jpg', descPt:'Divisórias de escritório', descEn:'Office partitions' },
+    { src:'camada8.jpg', descPt:'Resultado cristalino sem marcas', descEn:'Crystal clear result with no marks' }
+  ],
+  'fumigacao': [
+    { src:'Fumigacao 2.jpg', descPt:'Fumigação de armazéns industriais', descEn:'Industrial warehouse fumigation' },
+    { src:'Fumigacao 1.jpg', descPt:'Desinfestação de espaços comerciais', descEn:'Commercial space pest control' },
+    { src:'Fumigacao 3.jpg', descPt:'Controlo de pragas em restaurantes', descEn:'Restaurant pest control' },
+    { src:'Obra 1.jpg', descPt:'Produtos certificados e seguros', descEn:'Certified and safe products' }
+  ]
+};
+
 function openServiceModal(key) {
-  const svc = SERVICE_DATA[key];
-  if (!svc) return;
-  const galleryHtml = `<div class="modal-gallery-4">` +
-    svc.imgs.map(img => `
+  const svc = TRANSLATIONS.serviceData[currentLang][key];
+  const imgs = SERVICE_IMGS[key];
+  if (!svc || !imgs) return;
+  const galleryHtml = '<div class="modal-gallery-4">' +
+    imgs.map(img => `
       <div>
         <div class="modal-img-portrait">
-          <img src="${img.src}" alt="${img.desc}"/>
+          <img src="${img.src}" alt="${currentLang==='pt'?img.descPt:img.descEn}"/>
         </div>
-        <div class="modal-img-caption">${img.desc}</div>
+        <div class="modal-img-caption">${currentLang==='pt'?img.descPt:img.descEn}</div>
       </div>`).join('') +
-    `</div>`;
+    '</div>';
   document.getElementById('serviceModalContent').innerHTML = `
     <div class="modal-tag">${svc.tag}</div>
     <h2 class="modal-title">${svc.title}</h2>
@@ -1075,7 +1369,7 @@ function openServiceModal(key) {
     ${galleryHtml}
     <div class="modal-cta">
       <a href="https://wa.me/258834884503?text=${svc.waMsg}" target="_blank">
-        <i class="fab fa-whatsapp"></i> Solicitar ${svc.title}
+        <i class="fab fa-whatsapp"></i> ${svc.cta}
       </a>
     </div>`;
   document.getElementById('serviceModal').classList.add('open');
@@ -1089,42 +1383,9 @@ function closeServiceModalOutside(e) {
   if (e.target === document.getElementById('serviceModal')) closeServiceModal();
 }
 
-/* ══ TABELA DE SERVIÇOS ══ */
-const PROJECT_DATA = {
-  'limpeza': {
-    img: 'obra 10.jpg',
-    tag: 'Serviço em Destaque',
-    title: 'Limpeza Profissional Completa',
-    desc: 'Prestamos serviços completos de limpeza para casas, empresas, indústrias e comércios em toda Moçambique.',
-    items: ['Limpeza Geral — Diária / Semanal / Mensal','Limpeza Pós-Obra — Serviço Pontual','Lavagem de Vidros — Pontual / Regular','Desinfecção de Ambientes — Pontual / Regular'],
-    waMsg: 'Olá!%20Quero%20solicitar%20Limpeza%20Profissional.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?'
-  },
-  'fumigacao-tab': {
-    img: 'Fumigacao 3.jpg',
-    tag: 'Controlo de Pragas',
-    title: 'Fumigação e Desinfestação',
-    desc: 'Eliminamos todo o tipo de pragas com produtos certificados e seguros.',
-    items: ['Fumigação de Insectos — Baratas, mosquitos, formigas','Desinfestação de Roedores — Ratos e ratazanas','Desinfecção de Ambientes — Vírus e bactérias','Tratamento de Madeiras — Térmitas e fungos'],
-    waMsg: 'Olá!%20Preciso%20de%20Fumigação.%20Quero%20orçamento%20da%20L%26J%20Multiservice.'
-  },
-  'industrial-tab': {
-    img: 'armazem.jpg',
-    tag: 'Sector Industrial',
-    title: 'Limpeza Industrial Especializada',
-    desc: 'Serviços de limpeza pesada para fábricas, armazéns, obras e instalações industriais.',
-    items: ['Limpeza de Fábricas e Armazéns','Limpeza de Equipamentos Industriais','Remoção de Resíduos Industriais','Desinfecção de Instalações Industriais'],
-    waMsg: 'Olá!%20Tenho%20interesse%20em%20Limpeza%20Industrial.%20Podem%20enviar%20orçamento%20da%20L%26J%20Multiservice?'
-  },
-  'contratos': {
-    img: 'contrato.jpg',
-    tag: 'Contratos de Longo Prazo',
-    title: 'Contratos e Parcerias',
-    desc: 'Oferecemos contratos de manutenção para empresas. Planos diários, mensais ou anuais com preço garantido.',
-    items: ['Contrato Diário — Serviço diário contínuo','Contrato Mensal — Manutenção mensal completa','Contrato Anual — Preço fixo garantido','Orçamento personalizado para cada empresa'],
-    waMsg: 'Olá!%20Quero%20saber%20mais%20sobre%20os%20Contratos%20da%20L%26J%20Multiservice.'
-  }
-};
-
+/* ══════════════════════════════════════
+   TABELA DE SERVIÇOS
+══════════════════════════════════════ */
 function switchProjectTab(btn, key) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -1132,11 +1393,14 @@ function switchProjectTab(btn, key) {
 }
 
 function renderProject(key) {
-  const d = PROJECT_DATA[key];
+  const d = TRANSLATIONS.projectData[currentLang][key];
+  if (!d) return;
   const items = d.items.map(i => `<li><i class="fas fa-check-circle"></i> ${i}</li>`).join('');
   document.getElementById('projectShowcase').innerHTML = `
-    <div class="project-img-portrait">
-      <img src="${d.img}" alt="${d.title}"/>
+    <div style="display:flex;justify-content:center;align-items:center;">
+      <div class="project-img-portrait">
+        <img src="${d.img}" alt="${d.title}"/>
+      </div>
     </div>
     <div class="project-content">
       <div class="project-tag">${d.tag}</div>
@@ -1144,13 +1408,15 @@ function renderProject(key) {
       <p style="color:var(--muted);font-size:13px;line-height:1.8;">${d.desc}</p>
       <ul class="project-list">${items}</ul>
       <a href="https://wa.me/258834884503?text=${d.waMsg}" target="_blank" class="btn-primary">
-        <i class="fab fa-whatsapp"></i> Solicitar Agora →
+        <i class="fab fa-whatsapp"></i> ${d.cta}
       </a>
     </div>`;
 }
 renderProject('limpeza');
 
-/* ══ NAVBAR ══ */
+/* ══════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════ */
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
@@ -1172,7 +1438,9 @@ document.addEventListener('click', e => {
   if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) closeMenu();
 });
 
-/* ══ FAQ ══ */
+/* ══════════════════════════════════════
+   FAQ
+══════════════════════════════════════ */
 function toggleFaq(el) {
   const item = el.parentElement;
   const isOpen = item.classList.contains('open');
@@ -1180,7 +1448,9 @@ function toggleFaq(el) {
   if (!isOpen) item.classList.add('open');
 }
 
-/* ══ REACÇÕES ══ */
+/* ══════════════════════════════════════
+   REACTIONS
+══════════════════════════════════════ */
 function toggleReact(btn, type) {
   const num = btn.querySelector('span');
   const cls = type === 'like' ? 'liked' : 'loved';
@@ -1189,7 +1459,9 @@ function toggleReact(btn, type) {
   num.textContent = isActive ? parseInt(num.textContent) - 1 : parseInt(num.textContent) + 1;
 }
 
-/* ══ ESTRELAS ══ */
+/* ══════════════════════════════════════
+   STARS
+══════════════════════════════════════ */
 let selectedStars = 0;
 function rateStar(e) {
   if (!e.target.dataset.v) return;
@@ -1200,13 +1472,20 @@ function submitTestimony() {
   const nome = document.getElementById('tNome').value.trim();
   const cargo = document.getElementById('tCargo').value.trim();
   const msg = document.getElementById('tMsg').value.trim();
-  if (!nome || !msg) { alert('Por favor preencha o seu nome e o comentário.'); return; }
+  if (!nome || !msg) {
+    alert(currentLang === 'pt' ? 'Por favor preencha o seu nome e o comentário.' : 'Please fill in your name and comment.');
+    return;
+  }
   const stars = '★'.repeat(selectedStars || 5) + '☆'.repeat(5 - (selectedStars || 5));
-  const text = `Olá! Quero deixar o meu testemunho sobre a L&J Multiservice:\n\n${stars}\n"${msg}"\n\n— ${nome}${cargo ? ' (' + cargo + ')' : ''}`;
+  const text = currentLang === 'pt'
+    ? `Olá! Quero deixar o meu testemunho sobre a L&J Multiservice:\n\n${stars}\n"${msg}"\n\n— ${nome}${cargo ? ' (' + cargo + ')' : ''}`
+    : `Hello! I want to leave my review about L&J Multiservice:\n\n${stars}\n"${msg}"\n\n— ${nome}${cargo ? ' (' + cargo + ')' : ''}`;
   window.open(`https://wa.me/258834884503?text=${encodeURIComponent(text)}`, '_blank');
 }
 
-/* ══ MAILCHIMP ══ */
+/* ══════════════════════════════════════
+   MAILCHIMP
+══════════════════════════════════════ */
 function handleMailchimp(e) {
   e.preventDefault();
   document.getElementById('mcSuccess').classList.add('show');
@@ -1214,7 +1493,9 @@ function handleMailchimp(e) {
   setTimeout(() => document.getElementById('mcSuccess').classList.remove('show'), 5000);
 }
 
-/* ══ COUNTERS ══ */
+/* ══════════════════════════════════════
+   COUNTERS
+══════════════════════════════════════ */
 const counterObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
@@ -1232,7 +1513,9 @@ const counterObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.stat-num').forEach(el => counterObserver.observe(el));
 
-/* ══ REVEAL ══ */
+/* ══════════════════════════════════════
+   REVEAL
+══════════════════════════════════════ */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
@@ -1248,5 +1531,3 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeService
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done"
